@@ -43,7 +43,8 @@ module.exports = function(grunt) {
         specs: []
       }),
       specs = Array.isArray(this.data) ? this.data : opts.specs,
-      tunnel;
+      tunnel,
+      runSaucy;
 
     process.env.SAUCE_USERNAME = opts.user;
     process.env.SAUCE_ACCESS_KEY = opts.key;
@@ -54,7 +55,9 @@ module.exports = function(grunt) {
     server.use(serveStatic('.'));
     server.listen(7777);
 
-    if (opts.ci) {
+    runSaucy = opts.ci && opts.user !== '' && opts.key !== '';
+
+    if (runSaucy) {
       if (opts.tunneled) {
         tunnel = new SauceTunnel(
           opts.user, opts.key,
